@@ -1,0 +1,21 @@
+{
+  "name": "episode-2_igniting-our-app",
+  "version": "1.0.0",
+  "description": "igniting the app",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "soubhik banerjee",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.11.0",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
+}
