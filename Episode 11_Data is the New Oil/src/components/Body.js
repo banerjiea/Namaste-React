@@ -1,7 +1,8 @@
 import useOnlineStatus from "../utils/useOnlineStatus";
-import RestaurantCard from "./RestaurantCard";
+import UserContext from "../utils/UserContext";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Body = () => {
@@ -13,7 +14,8 @@ const Body = () => {
   //const [listOfRestaurants, setListOfRestaurants] = arr;
   //const listOfRestaurants = arr[0];
   //const setListOfRestaurants = arr[1];
-  console.log("Body Rendered"); 
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
+  //console.log("Body Rendered");
   useEffect(() => {
     fetchData();
   }, []);
@@ -23,7 +25,7 @@ const Body = () => {
     );
 
     const json = await data.json();
-    console.log(json);
+    //console.log(json);
     //Optional Chaining
     setListOfRestaurants(
       json?.data.cards[4]?.card.card?.gridElements?.infoWithStyle?.restaurants
@@ -43,6 +45,8 @@ const Body = () => {
         Looks like you're offline!! Please check your internet connection;
       </h1>
     );
+
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   return listOfRestaurants.length === 0 ? (
     <Shimmer />
@@ -86,6 +90,14 @@ const Body = () => {
             Top Rated Restaurants
           </button>
         </div>
+        <div className="search m-4 p-4 flex items-center">
+          <label>Username : </label>
+          <input
+            className="border border-black p-2"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
       <div className="flex flex-wrap">
         {filteredRestaurants.map((restaurant) => (
@@ -94,7 +106,11 @@ const Body = () => {
             key={restaurant.info.id}
             to={"/restaurants/" + restaurant.info.id}
           >
-            <RestaurantCard resData={restaurant} />
+            {restaurant.info.avgRating > 4.4 ? (
+              <RestaurantCardPromoted resData={restaurant} />
+            ) : (
+              <RestaurantCard resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>
